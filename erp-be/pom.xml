@@ -13,7 +13,7 @@
     <artifactId>erp-be</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -67,6 +67,12 @@
             <version>1.2.19</version>
         </dependency>
 
+        <!--    Kytils -->
+        <dependency>
+            <groupId>link.kongyu</groupId>
+            <artifactId>Kytils</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 
@@ -76,8 +82,11 @@
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
-                    <include>link/kongyu/erp/model/*/mapper/*.xml</include>
+                    <include>link/kongyu/erp/modules/*/mapper/*.xml</include>
                 </includes>
+                <excludes>
+                    <exclude>link/kongyu/erp/*/*/index.md</exclude>
+                </excludes>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>

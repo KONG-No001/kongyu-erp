@@ -1,9 +1,12 @@
 package link.kongyu.erp.core.page.metadata;
 
+import link.kongyu.erp.core.page.metadata.enums.Operator;
+import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -20,7 +23,6 @@ public class PageRequest implements Cloneable, Serializable {
 
     private static final long serialVersionUID = 2104314315782542555L;
 
-
     /**
      * 搜索字段
      */
@@ -31,7 +33,21 @@ public class PageRequest implements Cloneable, Serializable {
      * 排序字段
      */
     @Setter
-    protected Set<PageSort> sorts;
+    protected LinkedHashSet<PageSort> sorts;
+
+    /**
+     * 页数
+     */
+    @Setter
+    @Getter
+    protected Integer pageNum = 1;
+
+    /**
+     * 页面大小
+     */
+    @Setter
+    @Getter
+    protected Integer pageSize = 30;
 
 
     /**
@@ -42,7 +58,23 @@ public class PageRequest implements Cloneable, Serializable {
      */
     @Override
     protected PageRequest clone() throws CloneNotSupportedException {
-        return (PageRequest) super.clone();
+        PageRequest cloned = (PageRequest) super.clone();
+
+        if (this.searches != null) {
+            cloned.searches = new HashSet<>();
+            for (PageSearch search : this.searches) {
+                cloned.searches.add(search.clone());
+            }
+        }
+
+        if (this.sorts != null) {
+            cloned.sorts = new LinkedHashSet<>();
+            for (PageSort sort : this.sorts) {
+                cloned.sorts.add(sort.clone());
+            }
+        }
+
+        return cloned;
     }
 
     /**
@@ -66,7 +98,7 @@ public class PageRequest implements Cloneable, Serializable {
      */
     public Set<PageSort> getSorts() {
         if (this.sorts == null) {
-            this.sorts = new HashSet<>();
+            this.sorts = new LinkedHashSet<>();
         }
         return this.sorts;
     }
@@ -78,7 +110,7 @@ public class PageRequest implements Cloneable, Serializable {
      * @param operation 要执行的操作。
      * @param value     搜索的值。
      */
-    public void addSearch(String field, String operation, Object value) {
+    public void addSearch(String field, Operator operation, Object value) {
         addSearch(new PageSearch(field, operation, value));
     }
 
@@ -172,6 +204,20 @@ public class PageRequest implements Cloneable, Serializable {
         List<PageSearch> searchList = getSearchList(field);
         if (!searchList.isEmpty()) {
             fun.accept(searchList);
+        }
+    }
+
+    /**
+     * 页面参数验证。
+     *
+     * @throws IllegalArgumentException 验证不成功时报错。
+     */
+    public void validate() {
+        if (pageNum != null && pageNum < 1) {
+            throw new IllegalArgumentException("页码不能小于1");
+        }
+        if (pageSize != null && (pageSize < 1 || pageSize > 1000)) {
+            throw new IllegalArgumentException("页大小必须在1-1000之间");
         }
     }
 }

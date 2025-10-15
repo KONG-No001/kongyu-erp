@@ -1,10 +1,12 @@
 package link.kongyu.erp.core.page.metadata;
 
+import link.kongyu.erp.core.page.metadata.enums.Operator;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * 页面查询字段
@@ -25,18 +27,20 @@ public class PageSearch implements Cloneable, Serializable {
 
     @Getter
     @Setter
-    protected String operation;
+    protected Operator operation;
 
     @Getter
     @Setter
     protected Object value;
+
+    public PageSearch() {}
 
     public PageSearch(String field, Object value) {
         this.field = field;
         this.value = value;
     }
 
-    public PageSearch(String field, String operation, Object value) {
+    public PageSearch(String field, Operator operation, Object value) {
         this.field = field;
         this.operation = operation;
         this.value = value;
@@ -51,5 +55,20 @@ public class PageSearch implements Cloneable, Serializable {
     @Override
     protected PageSearch clone() throws CloneNotSupportedException {
         return (PageSearch) super.clone();
+    }
+
+    /**
+     * 参数验证。
+     *
+     * @throws IllegalArgumentException 验证不成功时报错。
+     */
+    public void validate() {
+        if (field == null || field.trim().isEmpty()) {
+            throw new IllegalArgumentException("字段名不能为空");
+        }
+        // 根据操作符验证值类型
+        if (operation == Operator.IN && !(value instanceof Collection)) {
+            throw new IllegalArgumentException("IN操作符的值必须是集合类型");
+        }
     }
 }

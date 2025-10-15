@@ -19,7 +19,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
 
 mybatis-plus:
-  mapper-locations: classpath:link/kongyu/erp/model/*/mapper/*Mapper.xml
+  mapper-locations: classpath:link/kongyu/erp/modules/*/mapper/*Mapper.xml
   configuration:
     lazy-loading-enabled: true
     aggressive-lazy-loading: false
