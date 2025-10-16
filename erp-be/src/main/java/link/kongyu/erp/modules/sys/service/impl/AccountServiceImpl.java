@@ -4,13 +4,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import link.kongyu.erp.common.exception.ServiceException;
 import link.kongyu.erp.modules.sys.entity.Account;
 import link.kongyu.erp.modules.sys.mapper.AccountIMapper;
-import link.kongyu.erp.modules.sys.service.AccountIService;
+import link.kongyu.erp.modules.sys.service.AccountBaseService;
 import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AccountServiceImpl extends ServiceImpl<AccountIMapper, Account> implements AccountIService {
+public class AccountServiceImpl extends ServiceImpl<AccountIMapper, Account> implements AccountBaseService {
 
     @Override
     public AccountSimpleInfoDto getSimpleInfoById(String id) {

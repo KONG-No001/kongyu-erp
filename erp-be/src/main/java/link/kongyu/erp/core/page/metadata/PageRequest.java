@@ -40,14 +40,14 @@ public class PageRequest implements Cloneable, Serializable {
      */
     @Setter
     @Getter
-    protected Integer pageNum = 1;
+    protected int pageNum = 1;
 
     /**
      * 页面大小
      */
     @Setter
     @Getter
-    protected Integer pageSize = 30;
+    protected int pageSize = 30;
 
 
     /**
@@ -213,10 +213,10 @@ public class PageRequest implements Cloneable, Serializable {
      * @throws IllegalArgumentException 验证不成功时报错。
      */
     public void validate() {
-        if (pageNum != null && pageNum < 1) {
+        if (pageNum < 1) {
             throw new IllegalArgumentException("页码不能小于1");
         }
-        if (pageSize != null && (pageSize < 1 || pageSize > 1000)) {
+        if (pageSize < 1 || pageSize > 1000) {
             throw new IllegalArgumentException("页大小必须在1-1000之间");
         }
     }
