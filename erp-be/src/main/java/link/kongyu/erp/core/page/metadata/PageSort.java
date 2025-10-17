@@ -18,7 +18,7 @@ public class PageSort implements Cloneable, Serializable {
 
     @Setter
     @Getter
-    protected Direction direction;
+    protected Direction direction = Direction.ASC;
 
     public PageSort(String field, Direction direction) {
         this.field = field;

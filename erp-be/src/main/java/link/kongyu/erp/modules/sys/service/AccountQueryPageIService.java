@@ -10,6 +10,6 @@ import link.kongyu.erp.modules.sys.entity.Account;
  * @version v1.0.0
  * @since 2025/10/16
  */
-public interface AccountQueryPageIService {
+public interface AccountQueryPageIService extends QueryPageIService {
     PageResult<Account> findAccountPage(PageRequest pageRequest);
 }

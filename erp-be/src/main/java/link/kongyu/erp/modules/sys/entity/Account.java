@@ -20,6 +20,10 @@ public class Account extends PersistingObject {
     @TableField("password")
     private String password;
 
+    @TableField("type")
+    @JsonView({ViewObject.Detail.class, ViewObject.List.class})
+    private Integer type;
+
     @TableField("enabled")
     @JsonView({ViewObject.Detail.class, ViewObject.List.class})
     private Boolean enabled;

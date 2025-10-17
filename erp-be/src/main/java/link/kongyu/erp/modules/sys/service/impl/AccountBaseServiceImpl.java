@@ -10,7 +10,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AccountServiceImpl extends ServiceImpl<AccountIMapper, Account> implements AccountBaseService {
+public class AccountBaseServiceImpl extends ServiceImpl<AccountIMapper, Account> implements AccountBaseService {
 
     @Override
     public AccountSimpleInfoDto getSimpleInfoById(String id) {
