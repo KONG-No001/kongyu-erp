@@ -34,7 +34,7 @@ public class PersistingObject {
 
     @TableField("created_by")
     @JsonView(ViewObject.Detail.class)
-    private String createdBy;
+    private Long createdBy;
 
     @TableField("updated_date")
     @JsonView(ViewObject.Detail.class)
@@ -42,11 +42,21 @@ public class PersistingObject {
 
     @TableField("updated_by")
     @JsonView(ViewObject.Detail.class)
-    private String updatedBy;
+    private Long updatedBy;
 
     @TableLogic
     @TableField("deleted")
     @JsonIgnore
     private Boolean deleted = false;
+
+    public void setCreateInfo(long createdBy, LocalDateTime createdDate) {
+        this.createdBy = createdBy;
+        this.createdDate = createdDate != null ? createdDate : LocalDateTime.now();
+    }
+
+    public void setUpdateInfo(long updateBy, LocalDateTime updatedDate) {
+        this.updatedBy = updateBy;
+        this.updatedDate = updatedDate != null ? updatedDate : LocalDateTime.now();
+    }
 
 }

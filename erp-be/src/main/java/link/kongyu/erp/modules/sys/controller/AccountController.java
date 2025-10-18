@@ -6,14 +6,13 @@ import link.kongyu.erp.common.domain.Result;
 import link.kongyu.erp.common.domain.view.ViewObject;
 import link.kongyu.erp.core.page.metadata.PageRequest;
 import link.kongyu.erp.core.page.support.PageResult;
+import link.kongyu.erp.infrastructure.security.SecurityContext;
 import link.kongyu.erp.modules.sys.entity.Account;
 import link.kongyu.erp.modules.sys.service.AccountBaseService;
 import link.kongyu.erp.modules.sys.service.AccountQueryPageIService;
 import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 用户账号控制层。
@@ -38,10 +37,22 @@ public class AccountController {
         return Result.success(accountService.getSimpleInfoById(id));
     }
 
-    @GetMapping("/list")
-    @JsonView(ViewObject.List.class)
-    public Result<List<Account>> list() {
-        return Result.success(accountService.list());
+    @PostMapping("/add")
+    public Result<?> addAccount(@RequestBody Account account) {
+        accountService.addAccount(account, SecurityContext.getUserId());
+        return Result.success(null);
+    }
+
+    @PutMapping("/update")
+    public Result<?> updateAccount(@RequestBody Account account) {
+        accountService.updateAccount(account, SecurityContext.getUserId());
+        return Result.success(null);
+    }
+
+    @PutMapping("/enable")
+    public Result<?> enableAccount(long id, boolean enable) {
+        accountService.enableAccount(id, enable, SecurityContext.getUserId());
+        return Result.success(null);
     }
 
     @PostMapping("/page")
