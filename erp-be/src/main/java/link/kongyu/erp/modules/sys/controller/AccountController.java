@@ -55,10 +55,15 @@ public class AccountController {
         return Result.success(null);
     }
 
-    @PostMapping("/page")
-    @JsonView(ViewObject.List.class)
-    public Result<PageResult<?>> page(@RequestBody PageRequest pageRequest) {
+    @PostMapping("/find-account-page")
+    @JsonView({ViewObject.Detail.class})
+    public Result<PageResult<?>> findAccountPage(@RequestBody PageRequest pageRequest) {
         return Result.success(accountQueryPageIService.findAccountPage(pageRequest));
+    }
+
+    @PostMapping("/find-simple-info-page")
+    public Result<PageResult<?>> findSimpleAccountInfoPage(@RequestBody PageRequest pageRequest) {
+        return Result.success(accountQueryPageIService.findAccountSimpleInfoPage(pageRequest));
     }
 
 }

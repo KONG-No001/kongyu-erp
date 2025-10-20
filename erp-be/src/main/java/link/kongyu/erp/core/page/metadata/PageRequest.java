@@ -24,6 +24,12 @@ public class PageRequest implements Cloneable, Serializable {
     private static final long serialVersionUID = 2104314315782542555L;
 
     /**
+     * 展示字段列表
+     */
+    @Setter
+    protected Set<String> columns;
+
+    /**
      * 搜索字段
      */
     @Setter
@@ -75,6 +81,20 @@ public class PageRequest implements Cloneable, Serializable {
         }
 
         return cloned;
+    }
+
+
+    /**
+     * 返回展示字段列表
+     * 如果列表为 null，则初始化列表。
+     *
+     * @return 展示字段列表
+     */
+    public Set<String> getColumns() {
+        if (this.columns == null) {
+            this.columns = new LinkedHashSet<>();
+        }
+        return this.columns;
     }
 
     /**

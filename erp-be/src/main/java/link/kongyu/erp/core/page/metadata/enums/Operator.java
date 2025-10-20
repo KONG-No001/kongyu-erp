@@ -8,15 +8,17 @@ import lombok.Getter;
  * @since 2025/10/15
  */
 public enum Operator {
+    NONE(null),// 当为None时，需要自己构建语句
     EQ("="),
     NE("!="),
-    LIKE("like"),
+    LIKE("LIKE"),
+    IN("in"),
     GT(">"),
     GE(">="),
     LT("<"),
     LE("<="),
-    IN("in"),
-    NONE(null); // 当为None时，需要自己构建语句
+    BETWEEN("BETWEEN"),
+    ;
 
     @Getter
     private final String symbol;

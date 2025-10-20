@@ -4,6 +4,7 @@ import link.kongyu.erp.core.page.metadata.PageRequest;
 import link.kongyu.erp.core.page.service.QueryPageIService;
 import link.kongyu.erp.core.page.support.PageResult;
 import link.kongyu.erp.modules.sys.entity.Account;
+import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoDto;
 
 /**
  * @author Luojun
@@ -12,4 +13,6 @@ import link.kongyu.erp.modules.sys.entity.Account;
  */
 public interface AccountQueryPageIService extends QueryPageIService {
     PageResult<Account> findAccountPage(PageRequest pageRequest);
+
+    PageResult<AccountSimpleInfoDto> findAccountSimpleInfoPage(PageRequest pageRequest);
 }

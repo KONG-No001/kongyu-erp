@@ -70,5 +70,13 @@ public class PageSearch implements Cloneable, Serializable {
         if (operation == Operator.IN && !(value instanceof Collection)) {
             throw new IllegalArgumentException("IN操作符的值必须是集合类型");
         }
+        if (operation == Operator.BETWEEN) {
+            if (!(value instanceof Collection)) {
+                throw new IllegalArgumentException("BETWEEN操作符的值必须是集合类型");
+            }
+            if (((Collection<?>) value).size() != 2) {
+                throw new IllegalArgumentException("BETWEEN操作符的数量必须为2");
+            }
+        }
     }
 }

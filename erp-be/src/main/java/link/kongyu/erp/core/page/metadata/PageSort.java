@@ -35,4 +35,15 @@ public class PageSort implements Cloneable, Serializable {
     protected PageSort clone() throws CloneNotSupportedException {
         return (PageSort) super.clone();
     }
+
+    /**
+     * 参数验证。
+     *
+     * @throws IllegalArgumentException 验证不成功时报错。
+     */
+    public void validate() {
+        if (field == null || field.trim().isEmpty()) {
+            throw new IllegalArgumentException("字段名不能为空");
+        }
+    }
 }
