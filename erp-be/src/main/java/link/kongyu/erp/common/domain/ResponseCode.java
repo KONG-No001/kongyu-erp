@@ -16,9 +16,9 @@ public enum ResponseCode {
     // 业务错误状态码
     BUSINESS_ERROR(40000, "业务异常"),
     PARAM_VALID_ERROR(40001, "参数校验失败"),
-    DATA_NOT_FOUND(40004, "数据不存在"),
     UNAUTHORIZED(40001, "未授权"),
     FORBIDDEN(40003, "禁止访问"),
+    DATA_NOT_FOUND(40004, "数据不存在"),
 
     // 系统错误状态码
     SYSTEM_ERROR(50000, "系统异常"),

@@ -1,5 +1,7 @@
 package link.kongyu.erp.core.page.metadata.enums;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**
@@ -7,8 +9,10 @@ import lombok.Getter;
  * @version v1.0.0
  * @since 2025/10/15
  */
+
+
 public enum Operator {
-    NONE(null),// 当为None时，需要自己构建语句
+    NULL(null),// 当为NULL时，需要自己构建语句
     EQ("="),
     NE("!="),
     LIKE("LIKE"),
