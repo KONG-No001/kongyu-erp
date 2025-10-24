@@ -7,7 +7,6 @@ import link.kongyu.erp.common.domain.view.ViewObject;
 import link.kongyu.erp.core.page.metadata.PageRequest;
 import link.kongyu.erp.core.page.support.PageResult;
 import link.kongyu.erp.infrastructure.security.SecurityContext;
-import link.kongyu.erp.modules.sys.entity.Account;
 import link.kongyu.erp.modules.sys.service.AccountBaseService;
 import link.kongyu.erp.modules.sys.service.AccountQueryPageIService;
 import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoDto;
@@ -38,21 +37,20 @@ public class AccountController {
     }
 
     @PostMapping("/add")
-    public Result<?> addAccount(@RequestBody Account account) {
+    public Result<?> addAccount(@RequestBody AccountSimpleInfoDto account) {
         accountService.addAccount(account, SecurityContext.getUserId());
         return Result.success(null);
     }
 
     @PutMapping("/update")
-    public Result<?> updateAccount(@RequestBody Account account) {
+    public Result<?> updateAccount(@RequestBody AccountSimpleInfoDto account) {
         accountService.updateAccount(account, SecurityContext.getUserId());
         return Result.success(null);
     }
 
     @PutMapping("/enable")
-    public Result<?> enableAccount(long id, boolean enable) {
-        accountService.enableAccount(id, enable, SecurityContext.getUserId());
-        return Result.success(null);
+    public Result<?> batchEnableAccount(long[] ids, boolean enable) {
+        return Result.success(accountService.batchEnableAccount(ids, enable, SecurityContext.getUserId()));
     }
 
     @PostMapping("/find-account-page")

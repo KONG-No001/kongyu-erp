@@ -6,7 +6,7 @@ import link.kongyu.erp.core.page.metadata.PageRequest;
 import link.kongyu.erp.core.page.support.PageResult;
 import link.kongyu.erp.core.page.support.PageUtils;
 import link.kongyu.erp.core.page.support.builder.impl.GenericMpLambdaWrapperBuilder;
-import link.kongyu.erp.modules.sys.constants.AccountFieldMappings;
+import link.kongyu.erp.modules.sys.constants.AccountFields;
 import link.kongyu.erp.modules.sys.entity.Account;
 import link.kongyu.erp.modules.sys.service.AccountBaseService;
 import link.kongyu.erp.modules.sys.service.AccountQueryPageIService;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Service
 public class AccountQueryPageServiceImpl implements AccountQueryPageIService {
 
-    private final GenericMpLambdaWrapperBuilder<Account> genericWrapperBuilder = new GenericMpLambdaWrapperBuilder<>(AccountFieldMappings.FIELD_MAPPINGS);
+    private final GenericMpLambdaWrapperBuilder<Account> genericWrapperBuilder = new GenericMpLambdaWrapperBuilder<>(AccountFields.FIELD_MAPPINGS);
 
     @Autowired
     private AccountWrapperBuilder wrapperBuilder;

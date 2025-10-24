@@ -78,7 +78,7 @@ public class GenericMpLambdaWrapperBuilder<T> extends AbstractMpLambdaWrapperBui
     }
 
     protected void buildCondition(LambdaQueryChainWrapper<T> query, PageSearch search) {
-        if (validateConditions(search)) { return; }
+        if (shouldSkipSearch(search)) { return; }
         try {
             Operator operation = search.getOperation();
             if (operation == null) {
@@ -92,30 +92,30 @@ public class GenericMpLambdaWrapperBuilder<T> extends AbstractMpLambdaWrapperBui
             }
 
         }
-        catch (InvocationTargetException e) {
-            throw new BuildException("无法调用条件方法", e);
-        }
-        catch (IllegalAccessException e) {
-            throw new BuildException("无法访问条件方法", e);
+        catch (InvocationTargetException | IllegalAccessException e) {
+            throw new BuildException(
+                    String.format("构建查询条件失败 [字段:%s, 操作:%s]", search.getField(), search.getOperation()),
+                    e
+            );
         }
     }
 
     protected void buildSorting(LambdaQueryChainWrapper<T> query, PageSort sort) {
-        if (validateConditions(sort)) { return; }
+        if (shouldSkipSort(sort)) { return; }
         Direction direction = sort.getDirection();
         if (direction == null) { direction = Direction.ASC; }
         try {
             BuilderUtils.buildWrapperByDirection(direction, query, fieldMappings.get(sort.getField()));
         }
-        catch (InvocationTargetException e) {
-            throw new BuildException("无法调用排序方法", e);
-        }
-        catch (IllegalAccessException e) {
-            throw new BuildException("无法访问排序方法", e);
+        catch (InvocationTargetException | IllegalAccessException e) {
+            throw new BuildException(
+                    String.format("构建排序条件失败 [字段:%s, 操作:%s]", sort.getField(), direction),
+                    e
+            );
         }
     }
 
-    protected boolean validateConditions(PageSearch search) {
+    protected boolean shouldSkipSearch(PageSearch search) {
         String field = search.getField();
         Operator operation = search.getOperation();
         Object value = search.getValue();
@@ -129,8 +129,8 @@ public class GenericMpLambdaWrapperBuilder<T> extends AbstractMpLambdaWrapperBui
         return value == null;
     }
 
-    protected boolean validateConditions(PageSort search) {
-        String field = search.getField();
+    protected boolean shouldSkipSort(PageSort sort) {
+        String field = sort.getField();
         return !fieldMappings.containsKey(field);
     }
 }

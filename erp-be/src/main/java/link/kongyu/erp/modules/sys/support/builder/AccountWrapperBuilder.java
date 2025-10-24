@@ -5,7 +5,6 @@ import link.kongyu.erp.core.page.metadata.PageRequest;
 import link.kongyu.erp.core.page.metadata.PageSearch;
 import link.kongyu.erp.core.page.support.builder.BuilderUtils;
 import link.kongyu.erp.core.page.support.builder.impl.GenericMpLambdaWrapperBuilder;
-import link.kongyu.erp.modules.sys.constants.AccountFieldMappings;
 import link.kongyu.erp.modules.sys.entity.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static link.kongyu.erp.modules.sys.constants.AccountFieldConstants.*;
+import static link.kongyu.erp.modules.sys.constants.AccountFields.*;
 
 /**
  * @author Luojun
@@ -26,7 +25,7 @@ public class AccountWrapperBuilder extends GenericMpLambdaWrapperBuilder<Account
 
     @Autowired
     public AccountWrapperBuilder() {
-        super(AccountFieldMappings.FIELD_MAPPINGS, new HashSet<>(Arrays.asList(
+        super(FIELD_MAPPINGS, new HashSet<>(Arrays.asList(
                 FIELD_ID,
                 FIELD_CREATED_DATE,
                 FIELD_CREATED_BY,

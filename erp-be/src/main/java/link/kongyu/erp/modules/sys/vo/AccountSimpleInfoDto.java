@@ -6,5 +6,6 @@ import lombok.Data;
 public class AccountSimpleInfoDto {
     private Long id;
     private String username;
+    private Integer type;
     private Boolean enabled;
 }
