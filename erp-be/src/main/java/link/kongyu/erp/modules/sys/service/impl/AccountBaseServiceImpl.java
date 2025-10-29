@@ -6,7 +6,7 @@ import link.kongyu.erp.common.exception.ServiceException;
 import link.kongyu.erp.common.utils.MyBeanUtils;
 import link.kongyu.erp.core.batching.metadata.BatchProcessingResult;
 import link.kongyu.erp.modules.sys.entity.Account;
-import link.kongyu.erp.modules.sys.mapper.AccountIMapper;
+import link.kongyu.erp.modules.sys.mapper.AccountMapper;
 import link.kongyu.erp.modules.sys.service.AccountBaseService;
 import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoDto;
 import org.springframework.beans.BeanUtils;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import static link.kongyu.erp.modules.sys.constants.AccountFields.*;
 
 @Service
-public class AccountBaseServiceImpl extends ServiceImpl<AccountIMapper, Account> implements AccountBaseService {
+public class AccountBaseServiceImpl extends ServiceImpl<AccountMapper, Account> implements AccountBaseService {
 
     @Override
     public AccountSimpleInfoDto getSimpleInfoById(String id) {
@@ -102,7 +102,6 @@ public class AccountBaseServiceImpl extends ServiceImpl<AccountIMapper, Account>
             }
             catch (Exception e) {
                 batchProcessingResult.incrementErrorCount();
-                batchProcessingResult.getErrorMassages().add(e.getMessage());
             }
         }
         return batchProcessingResult;

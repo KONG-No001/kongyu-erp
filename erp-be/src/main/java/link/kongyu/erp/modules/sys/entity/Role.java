@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonView;
 import link.kongyu.erp.common.domain.PersistingObject;
 import link.kongyu.erp.common.domain.view.ViewObject;
-import link.kongyu.erp.modules.sys.constants.AccountType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,21 +16,19 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@TableName("sys_account")
-public class Account extends PersistingObject {
+@TableName("sys_role")
+public class Role extends PersistingObject {
 
-    @TableField("username")
+    @TableField("role_name")
     @JsonView({ViewObject.Detail.class, ViewObject.List.class})
-    private String username;
+    private String roleName;
 
-    @TableField("password")
-    private String password;
-
-    @TableField("type")
+    @TableField("parent_id")
     @JsonView({ViewObject.Detail.class, ViewObject.List.class})
-    private AccountType type;
+    private Long parentId;
 
     @TableField("enabled")
     @JsonView({ViewObject.Detail.class, ViewObject.List.class})
     private Boolean enabled;
+
 }

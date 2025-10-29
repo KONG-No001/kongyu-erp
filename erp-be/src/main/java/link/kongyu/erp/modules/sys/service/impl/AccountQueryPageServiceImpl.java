@@ -9,7 +9,7 @@ import link.kongyu.erp.core.page.support.builder.impl.GenericMpLambdaWrapperBuil
 import link.kongyu.erp.modules.sys.constants.AccountFields;
 import link.kongyu.erp.modules.sys.entity.Account;
 import link.kongyu.erp.modules.sys.service.AccountBaseService;
-import link.kongyu.erp.modules.sys.service.AccountQueryPageIService;
+import link.kongyu.erp.modules.sys.service.AccountQueryPageService;
 import link.kongyu.erp.modules.sys.support.builder.AccountWrapperBuilder;
 import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoDto;
 import org.springframework.beans.BeanUtils;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * @since 2025/10/16
  */
 @Service
-public class AccountQueryPageServiceImpl implements AccountQueryPageIService {
+public class AccountQueryPageServiceImpl implements AccountQueryPageService {
 
     private final GenericMpLambdaWrapperBuilder<Account> genericWrapperBuilder = new GenericMpLambdaWrapperBuilder<>(AccountFields.FIELD_MAPPINGS);
 

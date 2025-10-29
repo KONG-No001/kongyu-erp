@@ -4,10 +4,13 @@ import lombok.Getter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * 批处理结果跟踪器
+ *
  * @author Luojun
  * @version v1.0.0
  * @since 2025/10/23
@@ -18,13 +21,20 @@ public class BatchProcessingResult implements Serializable {
 
     @Getter
     private final int totalCount;
+
     private final AtomicInteger successCount = new AtomicInteger(0);
+
     private final AtomicInteger errorCount = new AtomicInteger(0);
+
     @Getter
-    private final List<String> errorMassages = new ArrayList<>();
+    private final List<String> errorMessages;
 
     public BatchProcessingResult(int totalCount) {
+        if (totalCount < 0) {
+            throw new IllegalArgumentException("总数量不能为负数");
+        }
         this.totalCount = totalCount;
+        this.errorMessages = Collections.synchronizedList(new ArrayList<>());
     }
 
     public int incrementSuccessCount() {

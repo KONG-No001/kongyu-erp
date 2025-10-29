@@ -5,5 +5,5 @@ import link.kongyu.erp.modules.sys.entity.Account;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AccountIMapper extends BaseMapper<Account> {
+public interface AccountMapper extends BaseMapper<Account> {
 }

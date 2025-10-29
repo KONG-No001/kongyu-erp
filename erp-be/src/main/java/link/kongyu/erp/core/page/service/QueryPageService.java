@@ -8,6 +8,6 @@ import link.kongyu.erp.core.page.support.PageResult;
  * @version v1.0.0
  * @since 2025/10/14
  */
-public interface QueryPageIService {
+public interface QueryPageService {
 
 }

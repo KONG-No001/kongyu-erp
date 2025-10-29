@@ -8,7 +8,7 @@ import link.kongyu.erp.core.page.metadata.PageRequest;
 import link.kongyu.erp.core.page.support.PageResult;
 import link.kongyu.erp.infrastructure.security.SecurityContext;
 import link.kongyu.erp.modules.sys.service.AccountBaseService;
-import link.kongyu.erp.modules.sys.service.AccountQueryPageIService;
+import link.kongyu.erp.modules.sys.service.AccountQueryPageService;
 import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +29,7 @@ public class AccountController {
     AccountBaseService accountService;
 
     @Autowired
-    AccountQueryPageIService accountQueryPageIService;
+    AccountQueryPageService accountQueryPageIService;
 
     @GetMapping("/info/{id}")
     public Result<AccountSimpleInfoDto> getSimpleInfoById(@PathVariable String id) {
