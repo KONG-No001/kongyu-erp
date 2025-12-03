@@ -48,7 +48,7 @@ public class AccountController {
         return Result.success(null);
     }
 
-    @PutMapping("/enable")
+    @PutMapping("/batch-enable")
     public Result<?> batchEnableAccount(long[] ids, boolean enable) {
         return Result.success(accountService.batchEnableAccount(ids, enable, SecurityContext.getUserId()));
     }

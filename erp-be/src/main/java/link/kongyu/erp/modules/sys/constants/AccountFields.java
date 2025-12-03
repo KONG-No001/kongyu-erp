@@ -2,8 +2,8 @@ package link.kongyu.erp.modules.sys.constants;
 
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import link.kongyu.erp.common.constants.PersistingFields;
+import link.kongyu.erp.common.utils.MapUtils;
 import link.kongyu.erp.modules.sys.entity.Account;
-import link.kongyu.kytils.map.MapUtils;
 
 import java.util.Map;
 

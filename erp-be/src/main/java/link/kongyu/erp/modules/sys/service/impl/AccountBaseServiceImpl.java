@@ -4,11 +4,13 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import link.kongyu.erp.common.domain.ResponseCode;
 import link.kongyu.erp.common.exception.ServiceException;
 import link.kongyu.erp.common.utils.MyBeanUtils;
-import link.kongyu.erp.core.batching.metadata.BatchProcessingResult;
+import link.kongyu.erp.core.batching.metadata.BatchingEntity;
+import link.kongyu.erp.core.batching.metadata.BatchingResult;
 import link.kongyu.erp.modules.sys.entity.Account;
 import link.kongyu.erp.modules.sys.mapper.AccountMapper;
 import link.kongyu.erp.modules.sys.service.AccountBaseService;
 import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,7 @@ import java.time.LocalDateTime;
 import static link.kongyu.erp.modules.sys.constants.AccountFields.*;
 
 @Service
+@Slf4j
 public class AccountBaseServiceImpl extends ServiceImpl<AccountMapper, Account> implements AccountBaseService {
 
     @Override
@@ -81,7 +84,7 @@ public class AccountBaseServiceImpl extends ServiceImpl<AccountMapper, Account> 
 
     @Override
     @Transactional
-    public void enableAccount(boolean enable, long userId, long id) {
+    public void enableAccount(long id, boolean enable, long userId) {
         Account entity = getById(id);
         if (entity == null) {
             throw new ServiceException(ResponseCode.PARAM_VALID_ERROR, "用户不存在");
@@ -93,18 +96,22 @@ public class AccountBaseServiceImpl extends ServiceImpl<AccountMapper, Account> 
 
     @Override
     @Transactional
-    public BatchProcessingResult batchEnableAccount(long[] ids, boolean enable, long userId) {
-        BatchProcessingResult batchProcessingResult = new BatchProcessingResult(ids.length);
+    public BatchingResult batchEnableAccount(long[] ids, boolean enable, long userId) {
+
+        BatchingEntity batchingEntity = new BatchingEntity(ids.length);
         for (long id : ids) {
             try {
-                enableAccount(enable, userId, id);
-                batchProcessingResult.incrementSuccessCount();
+                enableAccount(id, enable, userId);
+                batchingEntity.incrementSuccessCount();
             }
             catch (Exception e) {
-                batchProcessingResult.incrementErrorCount();
+                batchingEntity.addErrorMessage(String.format("ID[%s]操作失败。原因: %s", id, e.getMessage()));
             }
         }
-        return batchProcessingResult;
+
+        log.info("批量禁用{}", batchingEntity.getSummary());
+
+        return batchingEntity.toResult();
     }
 
 
