@@ -23,8 +23,12 @@ public class RoleAccessAssociation extends PersistingObject {
     @JsonView({ViewObject.Detail.class, ViewObject.List.class})
     private Long roleId;
 
-    @TableField("access_resource_id")
+    @TableField("business_type_id")
     @JsonView({ViewObject.Detail.class, ViewObject.List.class})
-    private Long accessResourceId;
+    private Integer businessTypeId;
+
+    @TableField("permission_level")
+    @JsonView({ViewObject.Detail.class, ViewObject.List.class})
+    private Integer permissionLevel;
 
 }
