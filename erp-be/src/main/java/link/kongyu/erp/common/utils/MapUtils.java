@@ -1,6 +1,7 @@
 package link.kongyu.erp.common.utils;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Luojun
@@ -9,6 +10,11 @@ import java.util.HashMap;
  */
 public class MapUtils {
 
+
+    public static <K, V, M extends Map<K, V>> M mergeMap(Map<K, V> source, M target) {
+        target.putAll(source);
+        return target;
+    }
 
     @SuppressWarnings("unchecked")
     public static <K, V> HashMap<K, V> getMapInstance(Object... args) {

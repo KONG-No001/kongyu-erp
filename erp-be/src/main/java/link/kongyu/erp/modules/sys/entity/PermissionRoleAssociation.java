@@ -16,19 +16,15 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@TableName("sys_role_access_association")
-public class RoleAccessAssociation extends PersistingObject {
+@TableName("sys_permission_role_association")
+public class PermissionRoleAssociation extends PersistingObject {
+
+    @TableField("permission_id")
+    @JsonView({ViewObject.Detail.class, ViewObject.List.class})
+    private Long permissionId;
 
     @TableField("role_id")
     @JsonView({ViewObject.Detail.class, ViewObject.List.class})
     private Long roleId;
-
-    @TableField("business_type_id")
-    @JsonView({ViewObject.Detail.class, ViewObject.List.class})
-    private Integer businessTypeId;
-
-    @TableField("permission_level")
-    @JsonView({ViewObject.Detail.class, ViewObject.List.class})
-    private Integer permissionLevel;
 
 }

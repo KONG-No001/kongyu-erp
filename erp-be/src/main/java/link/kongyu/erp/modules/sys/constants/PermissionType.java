@@ -5,6 +5,6 @@ package link.kongyu.erp.modules.sys.constants;
  * @version v1.0.0
  * @since 2025/10/29
  */
-public enum AccessResourceType {
+public enum PermissionType {
     MENU, BUTTON, API, DATA, FILE
 }

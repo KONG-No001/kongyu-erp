@@ -1,7 +1,7 @@
 package link.kongyu.erp.modules.sys.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import link.kongyu.erp.modules.sys.entity.AccountRuleAssociation;
+import link.kongyu.erp.modules.sys.entity.RoleAccountAssociation;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface AccountRuleAssociationMapper extends BaseMapper<AccountRuleAssociation> {
+public interface AccountRuleAssociationMapper extends BaseMapper<RoleAccountAssociation> {
 }
