@@ -75,6 +75,7 @@ public class PermissionBaseServiceImpl extends ServiceImpl<PermissionMapper, Per
         for (long id : ids) {
             try {
                 removeById(id);
+                batchingEntity.incrementSuccessCount();
             }
             catch (Exception e) {
                 batchingEntity.addErrorMessage(String.format("ID[%s] 操作失败。原因: %s", id, e.getMessage()));
@@ -93,6 +94,7 @@ public class PermissionBaseServiceImpl extends ServiceImpl<PermissionMapper, Per
         for (long id : ids) {
             try {
                 enablePermission(id, enable, userId);
+                batchingEntity.incrementSuccessCount();
             }
             catch (Exception e) {
                 batchingEntity.addErrorMessage(String.format("ID[%s] 操作失败。原因: %s", id, e.getMessage()));
@@ -125,7 +127,7 @@ public class PermissionBaseServiceImpl extends ServiceImpl<PermissionMapper, Per
                 .eq(FIELD_MAPPINGS.get(FIELD_PERMISSION_NAME), permissionName)
                 .not(id != null, w -> w.eq(FIELD_MAPPINGS.get(FIELD_ID), id));
 
-        if (count(wrapper.getWrapper()) > 1) {
+        if (count(wrapper.getWrapper()) > 0) {
             log.warn("权限名称 {} 已存在于 {} 业务组中", permissionName, businessGroup);
             throw new ServiceException(ResponseCode.PARAM_VALID_ERROR, "权限名称已存在于业务组中");
         }
@@ -139,7 +141,7 @@ public class PermissionBaseServiceImpl extends ServiceImpl<PermissionMapper, Per
                 .eq(FIELD_MAPPINGS.get(FIELD_ACCESS_RESOURCE), accessResource)
                 .not(id != null, w -> w.eq(FIELD_MAPPINGS.get(FIELD_ID), id));
 
-        if (count(wrapper.getWrapper()) > 1) {
+        if (count(wrapper.getWrapper()) > 0) {
             log.warn("资源名称 {} 重复", accessResource);
             throw new ServiceException(ResponseCode.PARAM_VALID_ERROR, "已经存在相同的资源名称");
         }

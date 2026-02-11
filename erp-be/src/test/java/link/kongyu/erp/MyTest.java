@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.interfaces.Compare;
 import com.baomidou.mybatisplus.extension.conditions.AbstractChainWrapper;
 
 import java.lang.reflect.Method;
+import java.util.Random;
 
 /**
  * @author Luojun
@@ -12,13 +13,6 @@ import java.lang.reflect.Method;
  */
 public class MyTest {
     public static void main(String[] args) throws NoSuchMethodException {
-        /*Method[] methods = Compare.class.getMethods();
-
-        for (Method method : methods) {
-
-            System.out.println(method.getName());
-
-        }*/
-        Method eq = AbstractChainWrapper.class.getMethod("eq", Object.class, Object.class);
+        System.out.println(new Random().nextInt());
     }
 }

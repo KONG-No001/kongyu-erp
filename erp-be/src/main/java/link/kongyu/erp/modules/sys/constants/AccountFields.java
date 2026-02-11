@@ -1,10 +1,14 @@
 package link.kongyu.erp.modules.sys.constants;
 
+import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import link.kongyu.erp.common.constants.PersistingFields;
 import link.kongyu.erp.common.utils.MapUtils;
+import link.kongyu.erp.common.utils.MyBeanUtils;
 import link.kongyu.erp.modules.sys.entity.Account;
 
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -33,5 +37,14 @@ public class AccountFields extends PersistingFields {
     );
 
     private AccountFields() {
+    }
+
+    @Override
+    protected Method getReadMethod(String name) {
+        PropertyDescriptor propertyDescriptor = MyBeanUtils.getPropertyDescriptor(Account.class, name);
+        if (propertyDescriptor == null) {
+            throw new RuntimeException();
+        }
+        return propertyDescriptor.getReadMethod();
     }
 }
