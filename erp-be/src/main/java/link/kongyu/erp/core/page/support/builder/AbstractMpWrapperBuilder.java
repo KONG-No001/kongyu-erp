@@ -16,7 +16,7 @@ public abstract class AbstractMpWrapperBuilder<T> implements QueryBuilder<T> {
     protected abstract void buildSorting(T query, PageRequest request);
 
     @Override
-    public T buildQuery(T query, PageRequest request) {
+    public T  buildQuery(T query, PageRequest request) {
         buildColumns(query, request);
         buildConditions(query, request);
         buildSorting(query, request);

@@ -10,9 +10,10 @@ import link.kongyu.erp.core.page.metadata.enums.Direction;
 import link.kongyu.erp.core.page.metadata.enums.Operator;
 import link.kongyu.erp.core.page.support.builder.AbstractMpLambdaWrapperBuilder;
 import link.kongyu.erp.core.page.support.builder.BuilderUtils;
+import link.kongyu.erp.core.page.support.builder.FieldMapping;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -23,12 +24,12 @@ import java.util.Set;
  */
 public class GenericMpLambdaWrapperBuilder<T> extends AbstractMpLambdaWrapperBuilder<T> {
 
-    public GenericMpLambdaWrapperBuilder(Map<String, SFunction<T, ?>> fieldMappings, Set<String> allowedFields) {
+    public GenericMpLambdaWrapperBuilder(FieldMapping<T> fieldMappings, Set<String> allowedFields) {
         super(fieldMappings, allowedFields);
     }
 
-    public GenericMpLambdaWrapperBuilder(Map<String, SFunction<T, ?>> fieldMappings) {
-        super(fieldMappings, fieldMappings.keySet());
+    public GenericMpLambdaWrapperBuilder(FieldMapping<T> fieldMappings) {
+        super(fieldMappings, new HashSet<>());
     }
 
     @Override
@@ -90,7 +91,6 @@ public class GenericMpLambdaWrapperBuilder<T> extends AbstractMpLambdaWrapperBui
             else {
                 BuilderUtils.buildWrapperByOperator(operation, query, fieldMappings.get(search.getField()), search.getValue());
             }
-
         }
         catch (InvocationTargetException | IllegalAccessException e) {
             throw new BuildException(
@@ -120,7 +120,7 @@ public class GenericMpLambdaWrapperBuilder<T> extends AbstractMpLambdaWrapperBui
         Operator operation = search.getOperation();
         Object value = search.getValue();
 
-        if (!fieldMappings.containsKey(field)) {
+        if (!allowedFields.contains(field)) {
             return true;
         }
         if (operation == null || Operator.NULL == operation) {
@@ -131,6 +131,6 @@ public class GenericMpLambdaWrapperBuilder<T> extends AbstractMpLambdaWrapperBui
 
     protected boolean shouldSkipSort(PageSort sort) {
         String field = sort.getField();
-        return !fieldMappings.containsKey(field);
+        return !allowedFields.contains(field);
     }
 }

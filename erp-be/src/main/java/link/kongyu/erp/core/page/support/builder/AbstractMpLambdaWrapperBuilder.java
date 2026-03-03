@@ -12,10 +12,10 @@ import java.util.Set;
  * @since 2025/10/21
  */
 public abstract class AbstractMpLambdaWrapperBuilder<T> extends AbstractMpWrapperBuilder<LambdaQueryChainWrapper<T>> {
-    protected final Map<String, SFunction<T, ?>> fieldMappings;
+    protected final FieldMapping<T> fieldMappings;
     protected final Set<String> allowedFields;
 
-    public AbstractMpLambdaWrapperBuilder(Map<String, SFunction<T, ?>> fieldMappings, Set<String> allowedFields) {
+    public AbstractMpLambdaWrapperBuilder(FieldMapping<T> fieldMappings, Set<String> allowedFields) {
         this.fieldMappings = fieldMappings;
         this.allowedFields = allowedFields;
     }

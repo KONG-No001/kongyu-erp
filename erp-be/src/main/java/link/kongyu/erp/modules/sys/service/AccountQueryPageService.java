@@ -12,7 +12,5 @@ import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoDto;
  * @since 2025/10/16
  */
 public interface AccountQueryPageService extends QueryPageService {
-    PageResult<Account> findAccountPage(PageRequest pageRequest);
-
-    PageResult<AccountSimpleInfoDto> findAccountSimpleInfoPage(PageRequest pageRequest);
+    PageResult<AccountSimpleInfoDto> findAccountPage(PageRequest pageRequest);
 }

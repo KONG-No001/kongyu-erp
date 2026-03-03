@@ -1,15 +1,8 @@
 package link.kongyu.erp.modules.sys.constants;
 
-import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import link.kongyu.erp.core.page.support.builder.FieldMapping;
 import link.kongyu.erp.common.constants.PersistingFields;
-import link.kongyu.erp.common.utils.MapUtils;
-import link.kongyu.erp.common.utils.MyBeanUtils;
 import link.kongyu.erp.modules.sys.entity.Account;
-
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Method;
-import java.util.Map;
 
 /**
  * @author Luojun
@@ -25,26 +18,8 @@ public class AccountFields extends PersistingFields {
     /**
      * 一般字段查询映射
      */
-    public static final Map<String, SFunction<Account, ?>> FIELD_MAPPINGS = MapUtils.getMapInstance(
-            FIELD_ID, (SFunction<Account, ?>) Account::getId,
-            FIELD_CREATED_DATE, (SFunction<Account, ?>) Account::getCreatedDate,
-            FIELD_CREATED_BY, (SFunction<Account, ?>) Account::getCreatedBy,
-            FIELD_UPDATED_DATE, (SFunction<Account, ?>) Account::getUpdatedDate,
-            FIELD_UPDATED_BY, (SFunction<Account, ?>) Account::getUpdatedBy,
-            FIELD_USERNAME, (SFunction<Account, ?>) Account::getUsername,
-            FIELD_TYPE, (SFunction<Account, ?>) Account::getType,
-            FIELD_ENABLED, (SFunction<Account, ?>) Account::getEnabled
-    );
+    public static final FieldMapping<Account> FIELD_MAPPINGS = new FieldMapping<>(Account.class);
 
     private AccountFields() {
-    }
-
-    @Override
-    protected Method getReadMethod(String name) {
-        PropertyDescriptor propertyDescriptor = MyBeanUtils.getPropertyDescriptor(Account.class, name);
-        if (propertyDescriptor == null) {
-            throw new RuntimeException();
-        }
-        return propertyDescriptor.getReadMethod();
     }
 }

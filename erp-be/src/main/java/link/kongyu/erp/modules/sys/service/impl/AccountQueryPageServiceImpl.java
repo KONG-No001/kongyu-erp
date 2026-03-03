@@ -1,12 +1,9 @@
 package link.kongyu.erp.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import link.kongyu.erp.core.page.metadata.PageRequest;
 import link.kongyu.erp.core.page.support.PageResult;
 import link.kongyu.erp.core.page.support.PageUtils;
-import link.kongyu.erp.core.page.support.builder.impl.GenericMpLambdaWrapperBuilder;
-import link.kongyu.erp.modules.sys.constants.AccountFields;
 import link.kongyu.erp.modules.sys.entity.Account;
 import link.kongyu.erp.modules.sys.service.AccountBaseService;
 import link.kongyu.erp.modules.sys.service.AccountQueryPageService;
@@ -29,8 +26,6 @@ import java.util.stream.Collectors;
 @Service
 public class AccountQueryPageServiceImpl implements AccountQueryPageService {
 
-    private final GenericMpLambdaWrapperBuilder<Account> genericWrapperBuilder = new GenericMpLambdaWrapperBuilder<>(AccountFields.FIELD_MAPPINGS);
-
     @Autowired
     private AccountWrapperBuilder wrapperBuilder;
 
@@ -42,37 +37,12 @@ public class AccountQueryPageServiceImpl implements AccountQueryPageService {
      *
      * @param pageRequest 页面请求参数
      * @return Account 页面数据
-     * @see AccountQueryPageServiceImpl#findAccountSimpleInfoPage(link.kongyu.erp.core.page.metadata.PageRequest) 不同的实现逻辑
      */
     @Override
-    public PageResult<Account> findAccountPage(PageRequest pageRequest) {
+    public PageResult<AccountSimpleInfoDto> findAccountPage(PageRequest pageRequest) {
         pageRequest.validate();
-
-        return PageUtils.toPageResult(
-                accountBaseService.page(
-                        PageUtils.toMpPage(pageRequest),
-                        wrapperBuilder.buildQuery(accountBaseService.lambdaQuery(), pageRequest).getWrapper()
-                )
-        );
-    }
-
-    /**
-     * 获取 Account 页面数据
-     *
-     * @param pageRequest 页面请求参数
-     * @return Account 页面数据
-     * @see AccountQueryPageServiceImpl#findAccountPage(link.kongyu.erp.core.page.metadata.PageRequest) 不同的实现逻辑
-     */
-    @Override
-    public PageResult<AccountSimpleInfoDto> findAccountSimpleInfoPage(PageRequest pageRequest) {
-        LambdaQueryChainWrapper<Account> wrapper = accountBaseService.lambdaQuery();
-
-        Page<Account> accountPage = accountBaseService.page(
-                PageUtils.toMpPage(pageRequest),
-                genericWrapperBuilder.buildQuery(wrapper, pageRequest).getWrapper()
-        );
-
-        return convertToSimpleDtoPage(accountPage);
+        Page<Account> page = accountBaseService.page(PageUtils.toMpPage(pageRequest), wrapperBuilder.buildQuery(accountBaseService.lambdaQuery(), pageRequest).getWrapper());
+        return convertToSimpleDtoPage(page);
     }
 
     private AccountSimpleInfoDto convertToSimpleDto(Account account) {
