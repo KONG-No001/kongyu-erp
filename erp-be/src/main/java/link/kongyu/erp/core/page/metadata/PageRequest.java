@@ -63,7 +63,7 @@ public class PageRequest implements Cloneable, Serializable {
      * @throws CloneNotSupportedException 不支持克隆时抛出
      */
     @Override
-    protected PageRequest clone() throws CloneNotSupportedException {
+    public PageRequest clone() throws CloneNotSupportedException {
         PageRequest cloned = (PageRequest) super.clone();
 
         if (this.searches != null) {
@@ -238,6 +238,14 @@ public class PageRequest implements Cloneable, Serializable {
         }
         if (pageSize < 1 || pageSize > 1000) {
             throw new IllegalArgumentException("页大小必须在1-1000之间");
+        }
+
+        if (searches != null && searches.size() > 0){
+            searches.forEach(PageSearch::validate);
+        }
+
+        if (sorts != null && sorts.size() > 0){
+            sorts.forEach(PageSort::validate);
         }
     }
 }

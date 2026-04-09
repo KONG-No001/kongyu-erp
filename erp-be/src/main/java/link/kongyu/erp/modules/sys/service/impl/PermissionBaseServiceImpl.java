@@ -1,149 +1,89 @@
 package link.kongyu.erp.modules.sys.service.impl;
 
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import link.kongyu.erp.common.domain.ResponseCode;
 import link.kongyu.erp.common.exception.ServiceException;
 import link.kongyu.erp.common.utils.MyBeanUtils;
-import link.kongyu.erp.core.batching.metadata.BatchingEntity;
-import link.kongyu.erp.core.batching.metadata.BatchingResult;
+import link.kongyu.erp.core.page.metadata.PageRequest;
+import link.kongyu.erp.core.page.support.PageResult;
+import link.kongyu.erp.core.page.support.PageUtils;
 import link.kongyu.erp.modules.sys.entity.Permission;
 import link.kongyu.erp.modules.sys.mapper.PermissionMapper;
 import link.kongyu.erp.modules.sys.service.PermissionBaseService;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
-import static link.kongyu.erp.modules.sys.constants.PermissionFields.*;
-
-/**
- * @author Luojun
- * @version v1.0.0
- * @since 2025/10/29
- */
-
 @Service
-@Slf4j
 public class PermissionBaseServiceImpl extends ServiceImpl<PermissionMapper, Permission> implements PermissionBaseService {
 
     @Override
-    public Permission getInfoById(long id) {
-        Permission entity = getById(id);
-        if (entity == null) {
-            log.warn("没有找到 Id[{}] 的 Permission 的记录", id);
-            throw new ServiceException(ResponseCode.PARAM_VALID_ERROR, "未找到记录");
+    @Transactional
+    public Permission create(Permission permission, Long userId) {
+        String permissionName = permission.getPermissionName();
+        if (count(lambdaQuery().eq(Permission::getPermissionName, permissionName).getWrapper()) > 0) {
+            throw new ServiceException(ResponseCode.PARAM_VALID_ERROR, "权限名'" + permissionName + "'重复");
         }
+
+        Permission entity = new Permission();
+        BeanUtils.copyProperties(permission, entity, "id", "createdBy", "createdDate", "updatedBy", "updatedDate", "deleted");
+
+        LocalDateTime now = LocalDateTime.now();
+        entity.setCreateInfo(userId, now);
+        entity.setUpdateInfo(userId, now);
+        entity.setDeleted(false);
+        if (entity.getEnabled() == null) {
+            entity.setEnabled(Boolean.TRUE);
+        }
+
+        save(entity);
         return entity;
     }
 
     @Override
     @Transactional
-    public void addPermission(Permission permission, long userId) {
-        checkForDuplicateByGroupAndName(permission);
-        checkForDuplicateByResource(permission);
+    public Permission update(Long id, Permission permission, Long userId) {
+        Permission entity = detail(id);
+        String permissionName = permission.getPermissionName();
+        if (permissionName != null && count(lambdaQuery()
+                .eq(Permission::getPermissionName, permissionName)
+                .ne(Permission::getId, id)
+                .getWrapper()) > 0) {
+            throw new ServiceException(ResponseCode.PARAM_VALID_ERROR, "权限名'" + permissionName + "'重复");
+        }
 
-        LocalDateTime now = LocalDateTime.now();
-        permission.setCreateInfo(userId, now);
-        permission.setUpdateInfo(userId, now);
-        permission.setEnabled(true);
-        permission.setDeleted(false);
-
-        save(permission);
+        MyBeanUtils.mergeProperties(permission, entity, "id", "createdBy", "createdDate", "updatedBy", "updatedDate", "deleted");
+        entity.setUpdateInfo(userId, LocalDateTime.now());
+        updateById(entity);
+        return entity;
     }
 
     @Override
     @Transactional
-    public void updatePermission(Permission permission, long userId) {
-
-        checkForDuplicateByGroupAndName(permission);
-        checkForDuplicateByResource(permission);
-
-        Permission entity = getInfoById(permission.getId());
-
-        MyBeanUtils.mergeProperties(permission, entity, FIELD_ID, FIELD_CREATED_BY, FIELD_CREATED_DATE, FIELD_DELETE);
+    public void delete(Long id, Long userId) {
+        Permission entity = detail(id);
+        entity.setDeleted(true);
         entity.setUpdateInfo(userId, LocalDateTime.now());
-
         updateById(entity);
     }
 
     @Override
-    @Transactional
-    public BatchingResult batchDeletePermission(long[] ids, long userId) {
-        BatchingEntity batchingEntity = new BatchingEntity(ids.length);
-        for (long id : ids) {
-            try {
-                removeById(id);
-                batchingEntity.incrementSuccessCount();
-            }
-            catch (Exception e) {
-                batchingEntity.addErrorMessage(String.format("ID[%s] 操作失败。原因: %s", id, e.getMessage()));
-            }
+    public Permission detail(Long id) {
+        Permission entity = getById(id);
+        if (entity == null) {
+            throw new ServiceException(ResponseCode.PARAM_VALID_ERROR, "权限不存在");
         }
-
-        log.info("批量删除{}", batchingEntity.getSummary());
-
-        return batchingEntity.toResult();
+        return entity;
     }
 
     @Override
-    @Transactional
-    public BatchingResult batchEnablePermission(long[] ids, boolean enable, long userId) {
-        BatchingEntity batchingEntity = new BatchingEntity(ids.length);
-        for (long id : ids) {
-            try {
-                enablePermission(id, enable, userId);
-                batchingEntity.incrementSuccessCount();
-            }
-            catch (Exception e) {
-                batchingEntity.addErrorMessage(String.format("ID[%s] 操作失败。原因: %s", id, e.getMessage()));
-            }
-        }
-
-        log.info("批量删除{}", batchingEntity.getSummary());
-
-        return batchingEntity.toResult();
-    }
-
-    @Override
-    @Transactional
-    public void enablePermission(long id, boolean enable, long userId) {
-        if (count(lambdaQuery().eq(FIELD_MAPPINGS.get(FIELD_ID), id).getWrapper()) == 0) {
-            log.warn("没有找到 Id[{}] 的 Permission 的记录", id);
-            throw new ServiceException(ResponseCode.PARAM_VALID_ERROR, "未找到记录");
-        }
-
-        update(lambdaUpdate().eq(FIELD_MAPPINGS.get(FIELD_ID), id).set(FIELD_MAPPINGS.get(FIELD_ENABLED), enable).getWrapper());
-    }
-
-    private void checkForDuplicateByGroupAndName(Permission permission) {
-        // 检查资名称与业务是否重复
-        Long id = permission.getId();
-        String businessGroup = permission.getBusinessGroup();
-        String permissionName = permission.getPermissionName();
-        LambdaQueryChainWrapper<Permission> wrapper = lambdaQuery()
-                .eq(FIELD_MAPPINGS.get(FIELD_BUSINESS_GROUP), businessGroup)
-                .eq(FIELD_MAPPINGS.get(FIELD_PERMISSION_NAME), permissionName)
-                .not(id != null, w -> w.eq(FIELD_MAPPINGS.get(FIELD_ID), id));
-
-        if (count(wrapper.getWrapper()) > 0) {
-            log.warn("权限名称 {} 已存在于 {} 业务组中", permissionName, businessGroup);
-            throw new ServiceException(ResponseCode.PARAM_VALID_ERROR, "权限名称已存在于业务组中");
-        }
-    }
-
-    private void checkForDuplicateByResource(Permission permission) {
-        // 检查资源字符串是否重复
-        Long id = permission.getId();
-        String accessResource = permission.getAccessResource();
-        LambdaQueryChainWrapper<Permission> wrapper = lambdaQuery()
-                .eq(FIELD_MAPPINGS.get(FIELD_ACCESS_RESOURCE), accessResource)
-                .not(id != null, w -> w.eq(FIELD_MAPPINGS.get(FIELD_ID), id));
-
-        if (count(wrapper.getWrapper()) > 0) {
-            log.warn("资源名称 {} 重复", accessResource);
-            throw new ServiceException(ResponseCode.PARAM_VALID_ERROR, "已经存在相同的资源名称");
-        }
+    public PageResult<Permission> search(PageRequest pageRequest, QueryWrapper<Permission> queryWrapper) {
+        pageRequest.validate();
+        Page<Permission> page = page(PageUtils.toMpPage(pageRequest), queryWrapper);
+        return PageResult.getInstance(page.getRecords(), page.getTotal(), page.getCurrent(), page.getSize());
     }
 }

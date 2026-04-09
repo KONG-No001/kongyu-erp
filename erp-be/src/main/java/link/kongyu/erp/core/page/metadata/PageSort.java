@@ -18,7 +18,7 @@ public class PageSort implements Cloneable, Serializable {
 
     @Setter
     @Getter
-    protected Direction direction = Direction.ASC;
+    protected Direction direction;
 
     public PageSort(String field, Direction direction) {
         this.field = field;
@@ -32,7 +32,7 @@ public class PageSort implements Cloneable, Serializable {
      * @throws CloneNotSupportedException 不支持克隆时抛出
      */
     @Override
-    protected PageSort clone() throws CloneNotSupportedException {
+    public PageSort clone() throws CloneNotSupportedException {
         return (PageSort) super.clone();
     }
 

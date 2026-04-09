@@ -24,12 +24,12 @@ public class PermissionFields extends PersistingFields {
      * 一般字段查询映射
      */
     public static final Map<String, SFunction<Permission, ?>> FIELD_MAPPINGS = MapUtils.getMapInstance(
-            FIELD_ID, (SFunction<Permission, ?>) Permission::getId,
-            FIELD_CREATED_DATE, (SFunction<Permission, ?>) Permission::getCreatedDate,
-            FIELD_CREATED_BY, (SFunction<Permission, ?>) Permission::getCreatedBy,
-            FIELD_UPDATED_DATE, (SFunction<Permission, ?>) Permission::getUpdatedDate,
-            FIELD_UPDATED_BY, (SFunction<Permission, ?>) Permission::getUpdatedBy,
-            FIELD_DELETE, (SFunction<Permission, ?>) Permission::getUpdatedBy,
+            F_ID, (SFunction<Permission, ?>) Permission::getId,
+            F_CREATED_DATE, (SFunction<Permission, ?>) Permission::getCreatedDate,
+            F_CREATED_BY, (SFunction<Permission, ?>) Permission::getCreatedBy,
+            F_UPDATED_DATE, (SFunction<Permission, ?>) Permission::getUpdatedDate,
+            F_UPDATED_BY, (SFunction<Permission, ?>) Permission::getUpdatedBy,
+            F_DELETE, (SFunction<Permission, ?>) Permission::getUpdatedBy,
             FIELD_PERMISSION_NAME, (SFunction<Permission, ?>) Permission::getPermissionName,
             FIELD_TYPE, (SFunction<Permission, ?>) Permission::getType,
             FIELD_ACCESS_RESOURCE, (SFunction<Permission, ?>) Permission::getAccessResource,

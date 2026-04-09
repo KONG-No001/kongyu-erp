@@ -53,7 +53,7 @@ public class PageSearch implements Cloneable, Serializable {
      * @throws CloneNotSupportedException 不支持克隆时抛出
      */
     @Override
-    protected PageSearch clone() throws CloneNotSupportedException {
+    public PageSearch clone() throws CloneNotSupportedException {
         return (PageSearch) super.clone();
     }
 

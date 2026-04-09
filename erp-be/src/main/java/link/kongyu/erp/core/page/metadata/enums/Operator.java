@@ -1,7 +1,5 @@
 package link.kongyu.erp.core.page.metadata.enums;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**
@@ -22,6 +20,10 @@ public enum Operator {
     LT("<"),
     LE("<="),
     BETWEEN("BETWEEN"),
+    IN_OR_EQ(null),
+    IN_OR_LIKE(null),
+    IN_OR_LEFT_LIKE(null),
+    IN_OR_RIGHT_LIKE(null),
     ;
 
     @Getter

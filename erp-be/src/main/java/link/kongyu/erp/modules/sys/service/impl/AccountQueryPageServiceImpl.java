@@ -7,8 +7,8 @@ import link.kongyu.erp.core.page.support.PageUtils;
 import link.kongyu.erp.modules.sys.entity.Account;
 import link.kongyu.erp.modules.sys.service.AccountBaseService;
 import link.kongyu.erp.modules.sys.service.AccountQueryPageService;
-import link.kongyu.erp.modules.sys.support.builder.AccountWrapperBuilder;
-import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoDto;
+import link.kongyu.erp.modules.sys.support.compiler.AccountQueryCompiler;
+import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoView;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,10 +27,10 @@ import java.util.stream.Collectors;
 public class AccountQueryPageServiceImpl implements AccountQueryPageService {
 
     @Autowired
-    private AccountWrapperBuilder wrapperBuilder;
+    private AccountBaseService accountBaseService;
 
     @Autowired
-    private AccountBaseService accountBaseService;
+    private AccountQueryCompiler accountQueryCompiler;
 
     /**
      * 获取 Account 页面数据
@@ -39,27 +39,27 @@ public class AccountQueryPageServiceImpl implements AccountQueryPageService {
      * @return Account 页面数据
      */
     @Override
-    public PageResult<AccountSimpleInfoDto> findAccountPage(PageRequest pageRequest) {
+    public PageResult<AccountSimpleInfoView> findAccountPage(PageRequest pageRequest) {
         pageRequest.validate();
-        Page<Account> page = accountBaseService.page(PageUtils.toMpPage(pageRequest), wrapperBuilder.buildQuery(accountBaseService.lambdaQuery(), pageRequest).getWrapper());
+        Page<Account> page = accountBaseService.page(PageUtils.toMpPage(pageRequest), accountQueryCompiler.compile(pageRequest));
         return convertToSimpleDtoPage(page);
     }
 
-    private AccountSimpleInfoDto convertToSimpleDto(Account account) {
-        AccountSimpleInfoDto dto = new AccountSimpleInfoDto();
+    private AccountSimpleInfoView convertToSimpleDto(Account account) {
+        AccountSimpleInfoView dto = new AccountSimpleInfoView();
         BeanUtils.copyProperties(account, dto);
         return dto;
     }
 
-    private PageResult<AccountSimpleInfoDto> convertToSimpleDtoPage(Page<Account> accountPage) {
-        List<AccountSimpleInfoDto> dtos = accountPage
+    private PageResult<AccountSimpleInfoView> convertToSimpleDtoPage(Page<Account> accountPage) {
+        List<AccountSimpleInfoView> views = accountPage
                 .getRecords()
                 .stream()
                 .map(this::convertToSimpleDto)
                 .collect(Collectors.toList());
 
         return PageResult.getInstance(
-                dtos,
+                views,
                 accountPage.getTotal(),
                 accountPage.getCurrent(),
                 accountPage.getSize()

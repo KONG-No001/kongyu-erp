@@ -7,9 +7,11 @@ import link.kongyu.erp.common.domain.view.ViewObject;
 import link.kongyu.erp.core.page.metadata.PageRequest;
 import link.kongyu.erp.core.page.support.PageResult;
 import link.kongyu.erp.infrastructure.security.SecurityContext;
+import link.kongyu.erp.modules.sys.entity.Account;
 import link.kongyu.erp.modules.sys.service.AccountBaseService;
 import link.kongyu.erp.modules.sys.service.AccountQueryPageService;
-import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoDto;
+import link.kongyu.erp.modules.sys.support.compiler.AccountQueryCompiler;
+import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,19 +33,50 @@ public class AccountController {
     @Autowired
     AccountQueryPageService accountQueryPageIService;
 
+    @Autowired
+    AccountQueryCompiler accountQueryCompiler;
+
+    @PostMapping({"", "/"})
+    public Result<Account> create(@RequestBody Account account) {
+        return Result.success(accountService.create(account, SecurityContext.getUserId()));
+    }
+
+    @PutMapping("/{id}")
+    public Result<Account> update(@PathVariable Long id, @RequestBody Account account) {
+        return Result.success(accountService.update(id, account, SecurityContext.getUserId()));
+    }
+
+    @DeleteMapping("/{id}")
+    public Result<Void> delete(@PathVariable Long id) {
+        accountService.delete(id, SecurityContext.getUserId());
+        return Result.success(null);
+    }
+
+    @GetMapping("/{id}")
+    @JsonView(ViewObject.Detail.class)
+    public Result<Account> detail(@PathVariable Long id) {
+        return Result.success(accountService.detail(id));
+    }
+
+    @PostMapping("/search")
+    @JsonView(ViewObject.List.class)
+    public Result<PageResult<Account>> search(@RequestBody PageRequest pageRequest) {
+        return Result.success(accountService.search(pageRequest, accountQueryCompiler.compile(pageRequest)));
+    }
+
     @GetMapping("/info/{id}")
-    public Result<AccountSimpleInfoDto> getSimpleInfoById(@PathVariable String id) {
+    public Result<AccountSimpleInfoView> getSimpleInfoById(@PathVariable String id) {
         return Result.success(accountService.getSimpleInfoById(id));
     }
 
     @PostMapping("/add")
-    public Result<?> addAccount(@RequestBody AccountSimpleInfoDto account) {
+    public Result<?> addAccount(@RequestBody Account account) {
         accountService.addAccount(account, SecurityContext.getUserId());
         return Result.success(null);
     }
 
     @PutMapping("/update")
-    public Result<?> updateAccount(@RequestBody AccountSimpleInfoDto account) {
+    public Result<?> updateAccount(@RequestBody Account account) {
         accountService.updateAccount(account, SecurityContext.getUserId());
         return Result.success(null);
     }

@@ -1,24 +1,20 @@
 package link.kongyu.erp.modules.sys.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
-import link.kongyu.erp.core.batching.metadata.BatchingResult;
+import link.kongyu.erp.core.page.metadata.PageRequest;
+import link.kongyu.erp.core.page.support.PageResult;
 import link.kongyu.erp.modules.sys.entity.Permission;
 
-/**
- * @author Luojun
- * @version v1.0.0
- * @since 2025/10/29
- */
 public interface PermissionBaseService extends IService<Permission> {
-    Permission getInfoById(long id);
 
-    void addPermission(Permission permission, long userId);
+    Permission create(Permission permission, Long userId);
 
-    void updatePermission(Permission permission, long userId);
+    Permission update(Long id, Permission permission, Long userId);
 
-    BatchingResult batchDeletePermission(long[] ids, long userId);
+    void delete(Long id, Long userId);
 
-    BatchingResult batchEnablePermission(long[] ids, boolean enable, long userId);
+    Permission detail(Long id);
 
-    void enablePermission(long id, boolean enable, long userId);
+    PageResult<Permission> search(PageRequest pageRequest, QueryWrapper<Permission> queryWrapper);
 }
