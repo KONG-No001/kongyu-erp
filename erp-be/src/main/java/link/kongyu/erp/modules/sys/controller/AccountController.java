@@ -9,9 +9,7 @@ import link.kongyu.erp.core.page.support.PageResult;
 import link.kongyu.erp.infrastructure.security.SecurityContext;
 import link.kongyu.erp.modules.sys.entity.Account;
 import link.kongyu.erp.modules.sys.service.AccountBaseService;
-import link.kongyu.erp.modules.sys.service.AccountQueryPageService;
-import link.kongyu.erp.modules.sys.support.compiler.AccountQueryCompiler;
-import link.kongyu.erp.modules.sys.vo.AccountSimpleInfoView;
+import link.kongyu.erp.modules.sys.service.AccountPageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,10 +29,15 @@ public class AccountController {
     AccountBaseService accountService;
 
     @Autowired
-    AccountQueryPageService accountQueryPageIService;
+    AccountPageService accountQueryPageIService;
 
-    @Autowired
-    AccountQueryCompiler accountQueryCompiler;
+    @GetMapping("/{id}")
+    @JsonView(ViewObject.Detail.class)
+    public Result<Account> detail(@PathVariable Long id) {
+        Account account = accountService.detail(id);
+        account.setPassword(null);
+        return Result.success(account);
+    }
 
     @PostMapping({"", "/"})
     public Result<Account> create(@RequestBody Account account) {
@@ -46,49 +49,15 @@ public class AccountController {
         return Result.success(accountService.update(id, account, SecurityContext.getUserId()));
     }
 
-    @DeleteMapping("/{id}")
-    public Result<Void> delete(@PathVariable Long id) {
-        accountService.delete(id, SecurityContext.getUserId());
-        return Result.success(null);
-    }
-
-    @GetMapping("/{id}")
-    @JsonView(ViewObject.Detail.class)
-    public Result<Account> detail(@PathVariable Long id) {
-        return Result.success(accountService.detail(id));
-    }
-
     @PostMapping("/search")
     @JsonView(ViewObject.List.class)
-    public Result<PageResult<Account>> search(@RequestBody PageRequest pageRequest) {
-        return Result.success(accountService.search(pageRequest, accountQueryCompiler.compile(pageRequest)));
-    }
-
-    @GetMapping("/info/{id}")
-    public Result<AccountSimpleInfoView> getSimpleInfoById(@PathVariable String id) {
-        return Result.success(accountService.getSimpleInfoById(id));
-    }
-
-    @PostMapping("/add")
-    public Result<?> addAccount(@RequestBody Account account) {
-        accountService.addAccount(account, SecurityContext.getUserId());
-        return Result.success(null);
-    }
-
-    @PutMapping("/update")
-    public Result<?> updateAccount(@RequestBody Account account) {
-        accountService.updateAccount(account, SecurityContext.getUserId());
-        return Result.success(null);
+    public Result<PageResult<?>> findAccountPage(@RequestBody PageRequest pageRequest) {
+        return Result.success(accountQueryPageIService.getTableData(pageRequest));
     }
 
     @PutMapping("/batch-enable")
     public Result<?> batchEnableAccount(long[] ids, boolean enable) {
-        return Result.success(accountService.batchEnableAccount(ids, enable, SecurityContext.getUserId()));
-    }
-
-    @PostMapping("/find-account-page")
-    public Result<PageResult<?>> findAccountPage(@RequestBody PageRequest pageRequest) {
-        return Result.success(accountQueryPageIService.findAccountPage(pageRequest));
+        return Result.success(accountService.batchEnable(ids, enable, SecurityContext.getUserId()));
     }
 
 }

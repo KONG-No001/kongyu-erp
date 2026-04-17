@@ -4,7 +4,7 @@ import link.kongyu.erp.modules.sys.constants.AccountType;
 import lombok.Data;
 
 @Data
-public class AccountSimpleInfoView {
+public class AccountTableView {
     private Long id;
     private String username;
     private AccountType type;

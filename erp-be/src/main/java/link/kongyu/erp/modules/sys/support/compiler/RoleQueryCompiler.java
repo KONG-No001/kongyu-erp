@@ -21,15 +21,17 @@ public class RoleQueryCompiler extends MpQueryCompilerAbstract<Role> {
 
     @PostConstruct
     public void init() {
+        register("roleCode", Operator.IN_OR_LIKE);
+        register("role_code", Operator.IN_OR_LIKE);
         register("roleName", Operator.IN_OR_LIKE);
         register("role_name", Operator.IN_OR_LIKE);
-        register("parentId", Operator.IN_OR_EQ);
-        register("parent_id", Operator.IN_OR_EQ);
+        register("roleType", Operator.IN_OR_EQ);
+        register("role_type", Operator.IN_OR_EQ);
         register("enabled", Operator.IN_OR_EQ);
         register("createdBy", Operator.IN_OR_EQ);
         register("created_by", Operator.IN_OR_EQ);
-        register("createdDate", Operator.BETWEEN);
-        register("created_date", Operator.BETWEEN);
+        register("createdTime", Operator.BETWEEN);
+        register("created_time", Operator.BETWEEN);
     }
 
     @Override

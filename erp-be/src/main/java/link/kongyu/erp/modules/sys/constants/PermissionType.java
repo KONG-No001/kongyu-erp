@@ -6,5 +6,5 @@ package link.kongyu.erp.modules.sys.constants;
  * @since 2025/10/29
  */
 public enum PermissionType {
-    MENU, BUTTON, API, DATA, FILE
+    MENU, BUTTON, API, DATA, FILE, CAPABILITY
 }

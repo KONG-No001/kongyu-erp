@@ -43,19 +43,35 @@ public class AccountQueryCompiler extends MpQueryCompilerAbstract<Account> {
             search.setOperation(Operator.IN_OR_EQ);
             StaticMpQueryCompiler.compileCondition(search, wrapper);
         });
-        conditionGenerators.put("type", (search, wrapper) -> {
+        conditionGenerators.put("nickname", (search, wrapper) -> {
+            search.setOperation(Operator.IN_OR_LIKE);
+            StaticMpQueryCompiler.compileCondition(search, wrapper);
+        });
+        conditionGenerators.put("realName", (search, wrapper) -> {
+            search.setOperation(Operator.IN_OR_LIKE);
+            StaticMpQueryCompiler.compileCondition(search, wrapper);
+        });
+        conditionGenerators.put("real_name", (search, wrapper) -> {
+            search.setOperation(Operator.IN_OR_LIKE);
+            StaticMpQueryCompiler.compileCondition(search, wrapper);
+        });
+        conditionGenerators.put("phone", (search, wrapper) -> {
             search.setOperation(Operator.IN_OR_EQ);
+            StaticMpQueryCompiler.compileCondition(search, wrapper);
+        });
+        conditionGenerators.put("email", (search, wrapper) -> {
+            search.setOperation(Operator.IN_OR_LIKE);
             StaticMpQueryCompiler.compileCondition(search, wrapper);
         });
         conditionGenerators.put("created_by", (search, wrapper) -> {
             search.setOperation(Operator.IN_OR_EQ);
             StaticMpQueryCompiler.compileCondition(search, wrapper);
         });
-        conditionGenerators.put("created_date", (search, wrapper) -> {
+        conditionGenerators.put("created_time", (search, wrapper) -> {
             search.setOperation(Operator.BETWEEN);
             StaticMpQueryCompiler.compileCondition(search, wrapper);
         });
-        conditionGenerators.put("createdDate", (search, wrapper) -> {
+        conditionGenerators.put("createdTime", (search, wrapper) -> {
             search.setOperation(Operator.BETWEEN);
             StaticMpQueryCompiler.compileCondition(search, wrapper);
         });

@@ -28,11 +28,13 @@ public class PermissionQueryCompiler extends MpQueryCompilerAbstract<Permission>
         register("type", Operator.IN_OR_EQ);
         register("accessResource", Operator.IN_OR_LIKE);
         register("access_resource", Operator.IN_OR_LIKE);
+        register("parentId", Operator.IN_OR_EQ);
+        register("parent_id", Operator.IN_OR_EQ);
         register("enabled", Operator.IN_OR_EQ);
         register("createdBy", Operator.IN_OR_EQ);
         register("created_by", Operator.IN_OR_EQ);
-        register("createdDate", Operator.BETWEEN);
-        register("created_date", Operator.BETWEEN);
+        register("createdTime", Operator.BETWEEN);
+        register("created_time", Operator.BETWEEN);
     }
 
     @Override
