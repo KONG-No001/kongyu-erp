@@ -27,30 +27,18 @@ public class AccountQueryCompiler extends MpQueryCompilerAbstract<Account> {
 
     @PostConstruct
     public void init() {
-        conditionGenerators.put("username", (search, wrapper) -> {
-            search.setOperation(Operator.IN_OR_LIKE);
-            StaticMpQueryCompiler.compileCondition(search, wrapper);
-        });
-        conditionGenerators.put("user_name", (search, wrapper) -> {
-            search.setOperation(Operator.IN_OR_LIKE);
-            StaticMpQueryCompiler.compileCondition(search, wrapper);
-        });
-        conditionGenerators.put("enabled", (search, wrapper) -> {
-            search.setOperation(Operator.IN_OR_EQ);
-            StaticMpQueryCompiler.compileCondition(search, wrapper);
-        });
-        conditionGenerators.put("createdBy", (search, wrapper) -> {
-            search.setOperation(Operator.IN_OR_EQ);
-            StaticMpQueryCompiler.compileCondition(search, wrapper);
-        });
-        conditionGenerators.put("nickname", (search, wrapper) -> {
-            search.setOperation(Operator.IN_OR_LIKE);
-            StaticMpQueryCompiler.compileCondition(search, wrapper);
-        });
-        conditionGenerators.put("realName", (search, wrapper) -> {
-            search.setOperation(Operator.IN_OR_LIKE);
-            StaticMpQueryCompiler.compileCondition(search, wrapper);
-        });
+        register("username", Operator.IN_OR_LIKE);
+        register("nickname", Operator.IN_OR_LIKE);
+        register("realName", Operator.IN_OR_LIKE);
+        register("real_name", Operator.IN_OR_LIKE);
+
+        register("createdBy", Operator.IN_OR_EQ);
+        register("createdTime", Operator.IN_OR_EQ);
+
+        register("enabled", Operator.EQ);
+
+
+
         conditionGenerators.put("real_name", (search, wrapper) -> {
             search.setOperation(Operator.IN_OR_LIKE);
             StaticMpQueryCompiler.compileCondition(search, wrapper);
@@ -89,6 +77,13 @@ public class AccountQueryCompiler extends MpQueryCompilerAbstract<Account> {
                 generator.accept(search, wrapper);
             }
         }
+    }
+
+    private void register(String field, Operator operator) {
+        conditionGenerators.put(field, (search, wrapper) -> {
+            search.setOperation(operator);
+            StaticMpQueryCompiler.compileCondition(search, wrapper);
+        });
     }
 
 

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  */
 
 @RestController
-@RequestMapping("/account")
+@RequestMapping("/sys/accounts")
 public class AccountController {
 
     @Autowired
@@ -49,7 +49,7 @@ public class AccountController {
         return Result.success(accountService.update(id, account, SecurityContext.getUserId()));
     }
 
-    @PostMapping("/search")
+    @PostMapping("/page")
     @JsonView(ViewObject.List.class)
     public Result<PageResult<?>> findAccountPage(@RequestBody PageRequest pageRequest) {
         return Result.success(accountQueryPageIService.getTableData(pageRequest));
